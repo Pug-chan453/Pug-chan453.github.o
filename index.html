@@ -1,454 +1,92 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>NovaNet</title>
-<link rel="icon" type="image/webp" href="OIP.webp">
 
-<style>
-*{box-sizing:border-box}
-body{
-margin:0;
-font-family:Segoe UI,Arial,sans-serif;
-background:#0b0b0d;
-color:#e6e6e6;
-}
+<link rel="icon" href="OIP.webp">
+<link rel="stylesheet" href="style.css">
 
-/* LOADING SCREEN */
-#loading{
-position:fixed;
-inset:0;
-background:#0b0b0d;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-z-index:1000;
-}
-
-#loading img{
-width:120px;
-height:120px;
-border-radius:50%;
-animation:spin 3s linear infinite;
-}
-
-@keyframes spin{
-from{transform:rotate(0deg)}
-to{transform:rotate(360deg)}
-}
-
-header{
-background:#121216;
-padding:14px 20px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-border-bottom:1px solid #23232a;
-position:sticky;
-top:0;
-z-index:10;
-}
-
-header h1{
-display:flex;
-align-items:center;
-gap:10px;
-margin:0;
-font-size:20px;
-letter-spacing:1px;
-}
-
-header h1 img{
-width:34px;
-height:34px;
-border-radius:50%;
-}
-
-header input{
-padding:6px;
-background:#0b0b0d;
-border:1px solid #2a2a32;
-color:white;
-border-radius:6px;
-}
-
-.container{
-display:grid;
-grid-template-columns:260px 1fr 320px;
-gap:20px;
-padding:20px;
-}
-
-.card{
-background:#121216;
-padding:16px;
-border-radius:12px;
-border:1px solid #23232a;
-}
-
-button{
-background:#2563eb;
-border:none;
-padding:8px 12px;
-border-radius:8px;
-color:white;
-cursor:pointer;
-font-weight:600;
-}
-
-button:hover{opacity:.9}
-
-textarea,input[type=text]{
-width:100%;
-padding:8px;
-margin-top:6px;
-background:#0b0b0d;
-border:1px solid #2a2a32;
-color:white;
-border-radius:6px;
-}
-
-.profile{text-align:center}
-
-.profile img{
-width:90px;
-height:90px;
-border-radius:50%;
-object-fit:cover;
-margin-bottom:10px;
-}
-
-.stats{
-display:flex;
-justify-content:space-around;
-margin-top:10px;
-font-size:14px;
-}
-
-.feedPost{
-margin-top:16px;
-padding:12px;
-border:1px solid #23232a;
-border-radius:10px;
-background:#0f0f14;
-}
-
-.feedPost img{
-width:100%;
-border-radius:8px;
-margin-top:8px;
-}
-
-.postHeader{
-display:flex;
-justify-content:space-between;
-font-size:13px;
-color:#9ca3af;
-margin-bottom:6px;
-}
-
-.comment{
-font-size:13px;
-margin-top:4px;
-color:#cfcfcf;
-}
-
-.chatBox{
-height:200px;
-overflow-y:auto;
-border:1px solid #2a2a32;
-padding:8px;
-border-radius:8px;
-margin-bottom:8px;
-}
-
-.notification{
-font-size:13px;
-margin-bottom:6px;
-color:#d1d5db;
-}
-
-.userList{
-font-size:14px;
-margin-top:8px;
-}
-
-.userItem{
-padding:4px 0;
-border-bottom:1px solid #23232a;
-}
-
-</style>
 </head>
 
 <body>
 
-<div id="loading">
-<img src="OIP.webp">
-<p>Carregando NovaNet...</p>
-</div>
-
 <header>
-<h1>
+
+<h1 class="logo">
 <img src="OIP.webp">
 NovaNet
 </h1>
 
-<div>
+<div class="login">
+
 <input id="usernameInput" placeholder="Seu nome">
 <button onclick="setUser()">Entrar</button>
+
 </div>
+
 </header>
+
 
 <div class="container">
 
+<!-- PERFIL -->
+
 <div class="card profile">
+
 <img id="avatar" src="OIP.webp">
-<input type="file" onchange="changeAvatar(event)">
+
 <h3 id="profileName">Visitante</h3>
 
 <div class="stats">
-<div><strong id="postCount">0</strong><br>Posts</div>
-<div><strong id="followers">0</strong><br>Seguidores</div>
-<div><strong id="following">0</strong><br>Seguindo</div>
-</div>
+
+<div>
+<strong id="postCount">0</strong>
+<p>Posts</p>
 </div>
 
+</div>
+
+</div>
+
+
+<!-- FEED -->
+
 <div class="card">
-<h3>Criar Post</h3>
-<textarea id="postText" placeholder="Compartilhe algo..."></textarea>
-<input type="text" id="postImage" placeholder="URL de imagem (opcional)">
-<button onclick="createPost()">Publicar</button>
+
+<h2>Criar Post</h2>
+
+<textarea id="postText" placeholder="O que você está pensando?"></textarea>
+
+<input id="postImage" placeholder="URL da imagem">
+
+<button onclick="createPost()">Postar</button>
 
 <div id="feed"></div>
+
 </div>
+
+
+<!-- CHAT -->
 
 <div class="card">
 
-<h3>Buscar Usuário</h3>
-<input id="searchUser" placeholder="Nome">
-<button onclick="followUser()">Seguir</button>
+<h2>Chat</h2>
 
-<h3>Usuários Seguidos</h3>
-<div id="followingList" class="userList"></div>
+<div id="chatBox"></div>
 
-<h3>Notificações</h3>
-<div id="notifications"></div>
-
-<h3>Chat</h3>
-<div id="chat" class="chatBox"></div>
 <input id="chatInput" placeholder="Mensagem">
+
 <button onclick="sendMessage()">Enviar</button>
 
 </div>
 
 </div>
 
-<script>
-
-let currentUser="Visitante"
-
-window.onload=()=>{
-setTimeout(()=>{
-document.getElementById("loading").style.display="none"
-},1200)
-}
-
-function save(key,value){
-localStorage.setItem(key,JSON.stringify(value))
-}
-
-function load(key){
-return JSON.parse(localStorage.getItem(key))
-}
-
-function setUser(){
-let name=document.getElementById("usernameInput").value
-if(!name) return
-
-currentUser=name
-
-document.getElementById("profileName").innerText=name
-
-notify("Login como "+name)
-updateStats()
-renderFollowing()
-}
-
-function changeAvatar(e){
-let file=e.target.files[0]
-let reader=new FileReader()
-
-reader.onload=function(){
-document.getElementById("avatar").src=reader.result
-}
-
-reader.readAsDataURL(file)
-}
-
-function createPost(){
-let text=document.getElementById("postText").value
-let img=document.getElementById("postImage").value
-
-if(!text) return
-
-let posts=load("posts")||[]
-
-posts.unshift({
-user:currentUser,
-text:text,
-img:img,
-likes:0,
-comments:[],
-time:new Date().toLocaleString()
-})
-
-save("posts",posts)
-
-document.getElementById("postText").value=""
-renderPosts()
-updateStats()
-}
-
-function likePost(i){
-let posts=load("posts")
-posts[i].likes++
-save("posts",posts)
-renderPosts()
-}
-
-function addComment(i){
-let input=document.getElementById("comment"+i)
-if(!input.value) return
-
-let posts=load("posts")
-posts[i].comments.push(currentUser+": "+input.value)
-save("posts",posts)
-renderPosts()
-}
-
-function renderPosts(){
-let feed=document.getElementById("feed")
-feed.innerHTML=""
-
-let posts=load("posts")||[]
-
-posts.forEach((p,i)=>{
-
-let div=document.createElement("div")
-div.className="feedPost"
-
-let imgHTML=p.img?`<img src="${p.img}">`:""
-
-let commentsHTML=p.comments.map(c=>`<div class='comment'>${c}</div>`).join("")
-
-
-div.innerHTML=`
-<div class="postHeader">
-<span>${p.user}</span>
-<span>${p.time}</span>
-</div>
-
-<p>${p.text}</p>
-
-${imgHTML}
-
-<p>❤️ ${p.likes}</p>
-
-<button onclick="likePost(${i})">Curtir</button>
-
-<div style="margin-top:6px">
-<input id="comment${i}" placeholder="Comentário">
-<button onclick="addComment(${i})">Enviar</button>
-</div>
-
-${commentsHTML}
-`
-
-feed.appendChild(div)
-
-})
-}
-
-function notify(msg){
-let box=document.getElementById("notifications")
-let div=document.createElement("div")
-
-div.className="notification"
-div.innerText=msg
-
-box.prepend(div)
-}
-
-function followUser(){
-let name=document.getElementById("searchUser").value
-
-if(!name) return
-
-let following=load("following")||[]
-
-if(!following.includes(name)){
-following.push(name)
-save("following",following)
-
-notify("Você seguiu "+name)
-}
-
-renderFollowing()
-updateStats()
-}
-
-function renderFollowing(){
-let list=document.getElementById("followingList")
-list.innerHTML=""
-
-let following=load("following")||[]
-
-following.forEach(u=>{
-let div=document.createElement("div")
-
-div.className="userItem"
-div.innerText=u
-
-list.appendChild(div)
-})
-}
-
-function updateStats(){
-let posts=load("posts")||[]
-let following=load("following")||[]
-
-let myPosts=posts.filter(p=>p.user===currentUser)
-
-document.getElementById("postCount").innerText=myPosts.length
-
-document.getElementById("following").innerText=following.length
-}
-
-function sendMessage(){
-let msg=document.getElementById("chatInput").value
-if(!msg) return
-
-let chat=document.getElementById("chat")
-
-let div=document.createElement("div")
-
-div.innerText=currentUser+": "+msg
-
-chat.appendChild(div)
-
-chat.scrollTop=chat.scrollHeight
-
-document.getElementById("chatInput").value=""
-}
-
-renderPosts()
-renderFollowing()
-updateStats()
-
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
